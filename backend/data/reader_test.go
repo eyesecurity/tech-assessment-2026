@@ -16,7 +16,7 @@ func writeFixture(t *testing.T, content string) string {
 }
 
 func TestReadCSV_ReturnsRecordsKeyedByHeader(t *testing.T) {
-	path := writeFixture(t, "id,asset,ip\n1,laptop-1,10.0.0.1\n2,server-9,10.0.0.2\n")
+	path := writeFixture(t, "id;asset;ip\n1;laptop-1;10.0.0.1\n2;server-9;10.0.0.2\n")
 
 	records, err := ReadCSV(path)
 	if err != nil {
@@ -30,6 +30,26 @@ func TestReadCSV_ReturnsRecordsKeyedByHeader(t *testing.T) {
 	}
 	if records[1]["ip"] != "10.0.0.2" {
 		t.Errorf("records[1][ip] = %q, want 10.0.0.2", records[1]["ip"])
+	}
+}
+
+func TestReadCSV_RowWithFewerFields(t *testing.T) {
+	// A row with fewer fields than the header is still returned; the missing
+	// trailing columns are simply absent from that record's map.
+	path := writeFixture(t, "id;asset;category\n1;laptop-1;phishing\n2;server-9\n")
+
+	records, err := ReadCSV(path)
+	if err != nil {
+		t.Fatalf("ReadCSV: %v", err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("len(records) = %d, want 2", len(records))
+	}
+	if records[1]["asset"] != "server-9" {
+		t.Errorf("records[1][asset] = %q, want server-9", records[1]["asset"])
+	}
+	if records[1]["category"] != "" {
+		t.Errorf("records[1][category] = %q, want empty (field absent)", records[1]["category"])
 	}
 }
 

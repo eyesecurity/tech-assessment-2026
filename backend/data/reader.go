@@ -21,7 +21,10 @@ func ReadCSV(path string) ([]map[string]string, error) {
 	}
 	defer f.Close()
 
-	rows, err := csv.NewReader(f).ReadAll()
+	r := csv.NewReader(f)
+	r.Comma = ';'          // records are semicolon-delimited
+	r.FieldsPerRecord = -1 // do not require a fixed number of fields per row
+	rows, err := r.ReadAll()
 	if err != nil {
 		return nil, fmt.Errorf("read csv %q: %w", path, err)
 	}
