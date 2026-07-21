@@ -74,8 +74,7 @@ Short answer: no.
 
 The heart of this assessment is the interview, not the code in isolation. Two
 senior engineers will sit down and walk through your work with you — how you
-modelled the problem, the trade-offs you made, how you handled the flaky
-Enrichment Service, and what you'd do differently. That conversation is where the
+modelled the problem and the trade-offs you made. That conversation is where the
 signal is.
 
 Publicly available solutions from previous candidates may well exist, and their
